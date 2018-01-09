@@ -4,6 +4,7 @@ namespace Swoft\Rpc\Packer\Json;
 
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Helper\JsonHelper;
+use Swoft\Rpc\Packer\PackerInterface;
 
 /**
  * the packer of json

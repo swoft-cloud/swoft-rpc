@@ -20,7 +20,10 @@
     ],
     "psr-4": {
       "Swoft\\Rpc\\":"src/"
-    }
+    },
+    "files": [
+      "src/Helper/Functions.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
