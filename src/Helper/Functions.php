@@ -1,5 +1,5 @@
 <?php
-if (!function_exists('service_packer')) {
+if (! function_exists('service_packer')) {
     /**
      * @return \Swoft\Rpc\Packer\ServicePacker
      */

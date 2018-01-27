@@ -7,14 +7,8 @@ use Swoft\Helper\JsonHelper;
 use Swoft\Rpc\Packer\PackerInterface;
 
 /**
- * the packer of json
- *
+ * Class JsonPacker
  * @Bean()
- * @uses      JsonPacker
- * @version   2017年07月14日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 Swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class JsonPacker implements PackerInterface
 {
@@ -22,10 +16,10 @@ class JsonPacker implements PackerInterface
      * pack data
      *
      * @param mixed $data
-     *
      * @return string
+     * @throws \InvalidArgumentException
      */
-    public function pack($data)
+    public function pack($data): string
     {
         return JsonHelper::encode($data, JSON_UNESCAPED_UNICODE);
     }
@@ -34,8 +28,8 @@ class JsonPacker implements PackerInterface
      * unpack data
      *
      * @param mixed $data
-     *
      * @return mixed
+     * @throws \InvalidArgumentException
      */
     public function unpack($data)
     {

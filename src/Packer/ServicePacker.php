@@ -9,39 +9,24 @@ use Swoft\Rpc\Exception\RpcException;
 use Swoft\Rpc\Packer\Json\JsonPacker;
 
 /**
- * the packer of rpc
- *
- * @uses      ServicePacker
- * @version   2017年12月10日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
+ * RPC Service data packer
  */
 class ServicePacker implements PackerInterface
 {
     /**
-     * the type of packer
-     *
      * @var string
      */
     private $type = 'json';
 
     /**
-     * the packers
-     *
      * @var array
      */
-    private $packers
-        = [
-
-        ];
+    private $packers = [];
 
     /**
-     * pack data
-     *
      * @param mixed $data
-     *
      * @return mixed
+     * @throws \Swoft\Rpc\Exception\RpcException
      */
     public function pack($data)
     {
@@ -51,11 +36,9 @@ class ServicePacker implements PackerInterface
     }
 
     /**
-     * unpack data
-     *
      * @param mixed $data
-     *
      * @return mixed
+     * @throws \Swoft\Rpc\Exception\RpcException
      */
     public function unpack($data)
     {
@@ -65,45 +48,43 @@ class ServicePacker implements PackerInterface
     }
 
     /**
-     * get packer from config
+     * Get packer from config
      *
      * @return PackerInterface
      * @throws \Swoft\Rpc\Exception\RpcException
      */
-    public function getPacker()
+    public function getPacker(): PackerInterface
     {
         $packers = $this->mergePackers();
-        if (!isset($packers[$this->type])) {
-            throw new RpcException("the $this->type of packer in not exist!");
+        if (! isset($packers[$this->type])) {
+            throw new RpcException(sprintf('the %s of packer in not exist', $this->type));
         }
         $packerName = $packers[$this->type];
-        $packer     = App::getBean($packerName);
-        if (!($packer instanceof PackerInterface)) {
-            throw new RpcException("the $this->type of packer in not instance of PackerInterface!");
+        $packer = App::getBean($packerName);
+        if (! ($packer instanceof PackerInterface)) {
+            throw new RpcException(sprintf('the %s of packer in not instance of PackerInterface', $this->type));
         }
 
         return $packer;
     }
 
     /**
-     * format the data of packer
+     * Format the data for packer
      *
-     * @param string $func   函数
-     * @param array  $params 参数
-     *
+     * @param string $function
+     * @param array  $params
      * @return array
      */
-    public function formatData(string $func, array $params)
+    public function formatData(string $function, array $params): array
     {
-        $logid  = RequestContext::getLogid();
+        $logid = RequestContext::getLogid();
         $spanid = RequestContext::getSpanid() + 1;
 
-        // 传递数据信息
         $data = [
-            'func'   => $func,
-            'params' => $params,
-            'logid'  => $logid,
-            'spanid' => $spanid,
+            'function' => $function,
+            'params'   => $params,
+            'logid'    => $logid,
+            'spanid'   => $spanid,
         ];
 
         return $data;
@@ -112,43 +93,43 @@ class ServicePacker implements PackerInterface
     /**
      * validate the data of packer
      *
-     * @param array $data 参数
-     *
+     * @param array $data params
      * @return mixed
+     * @throws \InvalidArgumentException
      * @throws \Swoft\Rpc\Exception\RpcException
      */
     public function checkData(array $data)
     {
         // check formatter
-        if (!isset($data['status']) || !isset($data['data']) || !isset($data['msg'])) {
-            throw new RpcException("the return of rpc is incorrected，data=" . JsonHelper::encode($data, JSON_UNESCAPED_UNICODE));
+        if (! isset($data['status']) || ! isset($data['data']) || ! isset($data['msg'])) {
+            throw new RpcException('the return of rpc is incorrected，data=' . JsonHelper::encode($data, JSON_UNESCAPED_UNICODE));
         }
 
         // check status
         $status = $data['status'];
-        if ($status != 200) {
-            throw new RpcException("the return status of rpc is incorrected，data=" . JsonHelper::encode($data, JSON_UNESCAPED_UNICODE));
+        if ($status !== 200) {
+            throw new RpcException('the return status of rpc is incorrected，data=' . JsonHelper::encode($data, JSON_UNESCAPED_UNICODE));
         }
 
         return $data['data'];
     }
 
     /**
-     * merge default and config packers
+     * Merge default and config packers
      *
      * @return array
      */
-    public function mergePackers()
+    public function mergePackers(): array
     {
         return array_merge($this->packers, $this->defaultPackers());
     }
 
     /**
-     * the packers of deafault
+     * Default packers
      *
      * @return array
      */
-    public function defaultPackers()
+    public function defaultPackers(): array
     {
         return [
             'json' => JsonPacker::class,
