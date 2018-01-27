@@ -1,40 +1,40 @@
 {
-    "name": "swoft/rpc",
-    "type": "library",
-    "keywords": [
-        "php",
-        "swoole",
-        "swoft",
-        "rpc"
-    ],
-    "description": "microservice framework base on swoole",
-    "license": "apache2.0",
-    "require": {
-        "swoft/framework": "dev-component"
+  "name": "swoft/rpc",
+  "type": "library",
+  "keywords": [
+    "php",
+    "swoole",
+    "swoft",
+    "rpc"
+  ],
+  "description": "microservice framework base on swoole",
+  "license": "apache2.0",
+  "require": {
+    "swoft/framework": "dev-component"
+  },
+  "autoload": {
+    "psr-4": {
+      "Swoft\\Rpc\\": "src/"
     },
-    "autoload": {
-        "psr-4": {
-            "Swoft\\Rpc\\": "src/"
-        },
-        "files": [
-            "src/Helper/Functions.php"
-        ]
+    "files": [
+      "src/Helper/Functions.php"
+    ]
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/swoft-cloud/framework"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/swoft-cloud/framework"
-        },
-        {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        }
-    ],
-    "require-dev": {
-        "eaglewu/swoole-ide-helper": "dev-master",
-        "phpunit/phpunit": "^5.7"
-    },
-    "scripts": {
-        "test": "./vendor/bin/phpunit -c phpunit.xml"
+    {
+      "type": "composer",
+      "url": "https://packagist.phpcomposer.com"
     }
+  ],
+  "require-dev": {
+    "eaglewu/swoole-ide-helper": "dev-master",
+    "phpunit/phpunit": "^5.7"
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit -c phpunit.xml"
+  }
 }
