@@ -3,7 +3,7 @@
 namespace Swoft\Rpc\Bootstrap;
 
 use Swoft\Bean\Annotation\BootBean;
-use Swoft\Core\BootBeanIntereface;
+use Swoft\Core\BootBeanInterface;
 use Swoft\Rpc\Packer\ServicePacker;
 
 /**
@@ -11,7 +11,7 @@ use Swoft\Rpc\Packer\ServicePacker;
  *
  * @BootBean()
  */
-class CoreBean implements BootBeanIntereface
+class CoreBean implements BootBeanInterface
 {
     /**
      * @return array
