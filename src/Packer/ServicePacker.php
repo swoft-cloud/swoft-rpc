@@ -25,24 +25,28 @@ class ServicePacker implements PackerInterface
 
     /**
      * @param mixed $data
+     * @param string $type
+     *
      * @return mixed
      * @throws \Swoft\Rpc\Exception\RpcException
      */
-    public function pack($data)
+    public function pack($data, string $type = "")
     {
-        $packer = $this->getPacker();
+        $packer = $this->getPacker($type);
 
         return $packer->pack($data);
     }
 
     /**
      * @param mixed $data
+     * @param string $type
+     *
      * @return mixed
      * @throws \Swoft\Rpc\Exception\RpcException
      */
-    public function unpack($data)
+    public function unpack($data, string $type = "")
     {
-        $packer = $this->getPacker();
+        $packer = $this->getPacker($type);
 
         return $packer->unpack($data);
     }
@@ -50,18 +54,20 @@ class ServicePacker implements PackerInterface
     /**
      * Get packer from config
      *
+     * @param string $type
+     *
      * @return PackerInterface
      * @throws \Swoft\Rpc\Exception\RpcException
      */
-    public function getPacker(): PackerInterface
+    public function getPacker(string $type = ""): PackerInterface
     {
         $packers = $this->mergePackers();
-        if (! isset($packers[$this->type])) {
+        if (!isset($packers[$this->type])) {
             throw new RpcException(sprintf('the %s of packer in not exist', $this->type));
         }
         $packerName = $packers[$this->type];
-        $packer = App::getBean($packerName);
-        if (! ($packer instanceof PackerInterface)) {
+        $packer     = App::getBean($packerName);
+        if (!($packer instanceof PackerInterface)) {
             throw new RpcException(sprintf('the %s of packer in not instance of PackerInterface', $this->type));
         }
 
@@ -71,20 +77,25 @@ class ServicePacker implements PackerInterface
     /**
      * Format the data for packer
      *
-     * @param string $function
+     * @param string $interface
+     * @param string $version
+     * @param string $method
      * @param array  $params
+     *
      * @return array
      */
-    public function formatData(string $function, array $params): array
+    public function formatData(string $interface, string $version, string $method, array $params): array
     {
-        $logid = RequestContext::getLogid();
+        $logid  = RequestContext::getLogid();
         $spanid = RequestContext::getSpanid() + 1;
 
         $data = [
-            'function' => $function,
-            'params'   => $params,
-            'logid'    => $logid,
-            'spanid'   => $spanid,
+            'interface' => $interface,
+            'version'   => $version,
+            'method'    => $method,
+            'params'    => $params,
+            'logid'     => $logid,
+            'spanid'    => $spanid,
         ];
 
         return $data;
@@ -94,6 +105,7 @@ class ServicePacker implements PackerInterface
      * validate the data of packer
      *
      * @param array $data params
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      * @throws \Swoft\Rpc\Exception\RpcException
@@ -101,7 +113,7 @@ class ServicePacker implements PackerInterface
     public function checkData(array $data)
     {
         // check formatter
-        if (! isset($data['status']) || ! isset($data['data']) || ! isset($data['msg'])) {
+        if (!isset($data['status']) || !isset($data['data']) || !isset($data['msg'])) {
             throw new RpcException('the return of rpc is incorrected，data=' . JsonHelper::encode($data, JSON_UNESCAPED_UNICODE));
         }
 
