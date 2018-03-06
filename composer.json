@@ -10,7 +10,7 @@
     "description": "microservice framework base on swoole",
     "license": "Apache-2.0",
     "require": {
-        "swoft/framework": "dev-master"
+        "swoft/framework": "^1.0"
     },
     "require-dev": {
         "eaglewu/swoole-ide-helper": "dev-master",
@@ -30,10 +30,6 @@
         }
     },
     "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/swoft-cloud/framework"
-        },
         {
             "type": "composer",
             "url": "https://packagist.phpcomposer.com"
