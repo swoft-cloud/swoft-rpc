@@ -23,7 +23,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SwoftTest\\Rpc\\": "test/Cases"
+            "SwoftTest\\Rpc\\": "test/case"
         }
     },
     "repositories": [
